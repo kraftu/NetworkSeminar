@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">Seminar</string>
+    <string name="app_name">Seminar 9 Network</string>
+    <string name="perform_request">Выполнить запрос</string>
+    <string name="title_result">Результат:</string>
 </resources>
