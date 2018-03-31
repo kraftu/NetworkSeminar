@@ -15,6 +15,9 @@ import java.util.concurrent.Callable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,30 +52,15 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public String call() throws Exception {
             //https://httpbin.org/html
+            OkHttpClient client = new OkHttpClient();
 
-            InetAddress address = InetAddress.getByName("httpbin.org");
-            Socket socket = new Socket(address, 80);
+            Request request = new Request.Builder()
+                    .url("http://httpbin.org/html")
+                    .build();
 
-            PrintWriter out = new PrintWriter(socket.getOutputStream());
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            Response response = client.newCall(request).execute();
 
-            String httpRequest = "GET /html HTTP/1.1\r\n"
-                    + "Host: httpbin.org\r\n"
-                    + "Connection: Close\r\n"
-                    + "\r\n";
-
-            out.print(httpRequest);
-            out.flush();
-
-            StringBuilder sb = new StringBuilder();
-
-            String line;
-            while ((line = in.readLine()) != null) {
-                sb.append(line).append("\n");
-            }
-
-            socket.close();
-            return sb.toString();
+            return response.body().string();
         }
     }
 }
