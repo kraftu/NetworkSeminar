@@ -12,7 +12,7 @@ import java.util.concurrent.Callable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -61,14 +61,14 @@ public class MainActivity extends AppCompatActivity {
                     .addNetworkInterceptor(new StethoInterceptor())
                     .build();
 
-            RequestBody formBody = new FormBody.Builder()
-                    .add("parameter1", "valueA")
-                    .add("parameter2", "valueB")
-                    .build();
+            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+
+            String jsonString = "{\"parameter1\": \"valueA\", \"parameter2\":\"valueB\"}";
+            RequestBody jsonBody = RequestBody.create(JSON, jsonString);
 
             Request request = new Request.Builder()
                     .url("https://postman-echo.com/post")
-                    .post(formBody)
+                    .post(jsonBody)
                     .build();
 
             Response response = client.newCall(request).execute();
