@@ -8,12 +8,13 @@ import android.widget.TextView;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import ru.tinkoff.ru.seminar.retrofit.ApiServerRetrofit;
+
+import ru.tinkoff.ru.seminar.retrofit.ApiPostmanEchoServer;
 
 public class MainActivity extends AppCompatActivity {
 
     private TextView resultTextView;
-    private BookServer bookServer;
+    private ApiPostmanEchoServer apiPostmanEchoServer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         resultTextView = findViewById(R.id.resultContent);
         findViewById(R.id.performRequest).setOnClickListener(v -> performRequest());
-        bookServer = new ApiServerRetrofit();
+        apiPostmanEchoServer = new ApiPostmanEchoServer();
     }
 
     private void printResult(@Nullable String resultString) {
@@ -29,11 +30,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void performRequest() {
-        bookServer.getBookById(10)
+        apiPostmanEchoServer.getApi().requestUrl("https://www.tinkoff.ru")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        book -> printResult(book.toString()),
+                        value -> printResult(value.string()),
                         throwable ->
                                 printResult(
                                         String.format("Throwable:%s", throwable.getMessage())

@@ -4,24 +4,19 @@ import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.util.List;
 
-import io.reactivex.Single;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import ru.tinkoff.ru.seminar.BookServer;
-import ru.tinkoff.ru.seminar.model.Book;
-import ru.tinkoff.ru.seminar.model.JsonBookDeserializer;
-import ru.tinkoff.ru.seminar.model.JsonBookSerializer;
 
 
-public class ApiServerRetrofit implements BookServer {
+//https://docs.postman-echo.com/
+public class ApiPostmanEchoServer {
     private Api api;
 
-    public ApiServerRetrofit() {
+    public ApiPostmanEchoServer() {
         //Логирование
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -33,9 +28,6 @@ public class ApiServerRetrofit implements BookServer {
 
         //Gson парсер
         GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(Book.class, new JsonBookSerializer());
-        gsonBuilder.registerTypeAdapter(Book.class, new JsonBookDeserializer());
-
         Gson gson = gsonBuilder.create();
 
         //Retrofit
@@ -43,20 +35,14 @@ public class ApiServerRetrofit implements BookServer {
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .baseUrl("http://fakerestapi.azurewebsites.net/")
+                .baseUrl("https://postman-echo.com/")
                 .build();
 
         //Api server
         api = retrofit.create(Api.class);
     }
 
-    @Override
-    public Single<List<Book>> getAllBooks() {
-        return api.getAllBooks();
-    }
-
-    @Override
-    public Single<Book> getBookById(int id) {
-        return api.getBookById(id);
+    public Api getApi() {
+        return api;
     }
 }
