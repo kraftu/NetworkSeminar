@@ -2,7 +2,7 @@ package ru.tinkoff.ru.seminar.retrofit;
 
 import java.util.List;
 
-import retrofit2.Call;
+import io.reactivex.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import ru.tinkoff.ru.seminar.model.Book;
@@ -11,8 +11,8 @@ import ru.tinkoff.ru.seminar.model.Book;
 public interface Api {
 
     @GET("api/Books")
-    Call<List<Book>> getAllBooks();
+    Single<List<Book>> getAllBooks();
 
     @GET("api/Books/{id}")
-    Call<Book> getBookById(@Path("id") int id);
+    Single<Book> getBookById(@Path("id") int id);
 }

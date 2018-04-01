@@ -2,6 +2,7 @@ package ru.tinkoff.ru.seminar;
 
 import java.util.List;
 
+import io.reactivex.Single;
 import ru.tinkoff.ru.seminar.model.Book;
 
 
@@ -9,7 +10,7 @@ import ru.tinkoff.ru.seminar.model.Book;
 @SuppressWarnings("SameParameterValue")
 public interface BookServer {
 
-    List<Book> getAllBooks() throws Exception;
+    Single<List<Book>> getAllBooks();
 
-    Book getBookById(int id) throws Exception;
+    Single<Book> getBookById(int id);
 }
